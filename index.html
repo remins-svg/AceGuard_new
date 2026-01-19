@@ -18,20 +18,48 @@
             color: white;
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             overflow-x: hidden;
-            margin: 0;
         }
-        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
         .text-gold-gradient {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .animate-scroll-up { animation: scrollUp 40s linear infinite; }
+        .border-gold {
+            border-image: var(--gold-gradient) 1;
+        }
+        
         @keyframes scrollUp {
             0% { transform: translateY(0); }
             100% { transform: translateY(-50%); }
         }
+        .animate-scroll-up {
+            animation: scrollUp 40s linear infinite;
+        }
+        .animate-scroll-up:hover {
+            animation-play-state: paused;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #00050D;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #BF9B30;
+            border-radius: 4px;
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* YouTube Overlay Fix */
         .video-container {
             position: absolute;
             top: 0;
@@ -43,7 +71,7 @@
         }
         .video-container iframe {
             width: 100vw;
-            height: 56.25vw;
+            height: 56.25vw; /* 16:9 ratio */
             min-height: 100vh;
             min-width: 177.77vh;
             position: absolute;
@@ -52,15 +80,14 @@
             transform: translate(-50%, -50%);
         }
     </style>
-    <script type="importmap">
+<script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom": "https://esm.sh/react-dom@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "lucide-react": "https://esm.sh/lucide-react@0.460.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
