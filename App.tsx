@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Phone, 
@@ -235,6 +234,32 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
     }
   };
 
+  const addSubImage = (caseIdx: number) => {
+    const nextCases = [...localData.cases];
+    nextCases[caseIdx].images = [...nextCases[caseIdx].images, ""];
+    nextCases[caseIdx].imageDetails = [...nextCases[caseIdx].imageDetails, "상세 설명"];
+    setLocalData({ ...localData, cases: nextCases });
+  };
+
+  const updateSubImage = (caseIdx: number, imgIdx: number, value: string) => {
+    const nextCases = [...localData.cases];
+    nextCases[caseIdx].images[imgIdx] = value;
+    setLocalData({ ...localData, cases: nextCases });
+  };
+
+  const updateSubImageDetail = (caseIdx: number, imgIdx: number, value: string) => {
+    const nextCases = [...localData.cases];
+    nextCases[caseIdx].imageDetails[imgIdx] = value;
+    setLocalData({ ...localData, cases: nextCases });
+  };
+
+  const deleteSubImage = (caseIdx: number, imgIdx: number) => {
+    const nextCases = [...localData.cases];
+    nextCases[caseIdx].images = nextCases[caseIdx].images.filter((_, i) => i !== imgIdx);
+    nextCases[caseIdx].imageDetails = nextCases[caseIdx].imageDetails.filter((_, i) => i !== imgIdx);
+    setLocalData({ ...localData, cases: nextCases });
+  };
+
   return (
     <div className="fixed inset-0 z-[2000] bg-[#020617] flex flex-col font-sans">
       {/* Admin Header */}
@@ -304,59 +329,105 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-8">
                 {localData.cases.map((c, i) => (
                   <div key={i} className="bg-black/40 border border-white/10 rounded-xl overflow-hidden p-6 relative group">
                     <button 
                       onClick={() => deleteCase(i)}
-                      className="absolute top-6 right-6 text-white/20 hover:text-red-500 transition-colors"
+                      className="absolute top-6 right-6 text-white/20 hover:text-red-500 transition-colors z-10"
                     >
-                      <Trash2 size={20} />
+                      <Trash2 size={24} />
                     </button>
                     
-                    <div className="grid grid-cols-3 gap-6">
-                      <div className="col-span-1">
-                        <div className="aspect-square bg-neutral-900 rounded-lg overflow-hidden border border-white/10 relative">
-                          <img src={c.img} className="w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                            <ImageIcon size={24} className="text-white" />
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                      {/* Left: Basic Info */}
+                      <div className="col-span-1 space-y-6">
+                        <div>
+                          <label className="block text-[#D4AF37] text-[10px] uppercase font-bold mb-2 tracking-widest">대표 이미지 (목록 노출)</label>
+                          <div className="aspect-video bg-neutral-900 rounded-lg overflow-hidden border border-white/10 relative">
+                            <img src={c.img} className="w-full h-full object-cover" />
+                          </div>
+                          <input 
+                            type="text" 
+                            value={c.img} 
+                            onChange={(e) => updateCase(i, 'img', e.target.value)}
+                            className="w-full mt-3 bg-neutral-900 border border-white/10 p-2 text-xs text-white rounded focus:outline-none focus:border-[#D4AF37]"
+                            placeholder="메인 이미지 URL"
+                          />
+                        </div>
+                        
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">제목</label>
+                            <input 
+                              type="text" 
+                              value={c.title} 
+                              onChange={(e) => updateCase(i, 'title', e.target.value)}
+                              className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded focus:outline-none focus:border-[#D4AF37]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">한줄 요약</label>
+                            <input 
+                              type="text" 
+                              value={c.year} 
+                              onChange={(e) => updateCase(i, 'year', e.target.value)}
+                              className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded focus:outline-none focus:border-[#D4AF37]"
+                            />
                           </div>
                         </div>
-                        <input 
-                          type="text" 
-                          value={c.img} 
-                          onChange={(e) => updateCase(i, 'img', e.target.value)}
-                          className="w-full mt-3 bg-neutral-900 border border-white/10 p-2 text-[10px] text-white/40 rounded focus:outline-none focus:border-[#D4AF37]"
-                          placeholder="메인 이미지 URL"
-                        />
                       </div>
-                      
+
+                      {/* Right: Detailed Image List (Full Editing) */}
                       <div className="col-span-2 space-y-4">
-                        <div>
-                          <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">제목</label>
-                          <input 
-                            type="text" 
-                            value={c.title} 
-                            onChange={(e) => updateCase(i, 'title', e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded focus:outline-none focus:border-[#D4AF37]"
-                          />
+                        <div className="flex justify-between items-center mb-4">
+                          <label className="block text-[#D4AF37] text-[10px] uppercase font-bold tracking-widest">상세 이미지 리스트 (슬라이드)</label>
+                          <button 
+                            onClick={() => addSubImage(i)}
+                            className="text-[10px] bg-white/5 hover:bg-white/10 text-white px-2 py-1 rounded border border-white/10 flex items-center gap-1 transition-all"
+                          >
+                            <Plus size={12} /> 이미지 추가
+                          </button>
                         </div>
-                        <div>
-                          <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">한줄 요약 (메달 아이콘 아래)</label>
-                          <input 
-                            type="text" 
-                            value={c.year} 
-                            onChange={(e) => updateCase(i, 'year', e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded focus:outline-none focus:border-[#D4AF37]"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">세부 리스트 (콤마 구분)</label>
-                          <textarea 
-                            value={c.desc} 
-                            onChange={(e) => updateCase(i, 'desc', e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded h-20 text-sm focus:outline-none focus:border-[#D4AF37]"
-                          />
+                        
+                        <div className="grid grid-cols-1 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                          {c.images.map((subImg, subIdx) => (
+                            <div key={subIdx} className="bg-neutral-900/50 border border-white/5 rounded-lg p-4 flex gap-4 items-start relative group/item">
+                              <button 
+                                onClick={() => deleteSubImage(i, subIdx)}
+                                className="absolute top-2 right-2 text-white/10 hover:text-red-500 opacity-0 group-hover/item:opacity-100 transition-all"
+                              >
+                                <X size={16} />
+                              </button>
+                              
+                              <div className="w-24 h-24 flex-shrink-0 bg-black rounded overflow-hidden border border-white/10">
+                                <img src={subImg} className="w-full h-full object-cover" />
+                              </div>
+                              
+                              <div className="flex-1 space-y-3">
+                                <div>
+                                  <label className="block text-[9px] text-white/20 uppercase mb-1">이미지 URL</label>
+                                  <input 
+                                    type="text" 
+                                    value={subImg} 
+                                    onChange={(e) => updateSubImage(i, subIdx, e.target.value)}
+                                    className="w-full bg-black/40 border border-white/10 p-1.5 text-xs text-white rounded focus:outline-none focus:border-[#D4AF37]"
+                                    placeholder="https://..."
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-[9px] text-white/20 uppercase mb-1">이미지 설명</label>
+                                  <input 
+                                    type="text" 
+                                    value={c.imageDetails[subIdx] || ""} 
+                                    onChange={(e) => updateSubImageDetail(i, subIdx, e.target.value)}
+                                    className="w-full bg-black/40 border border-white/10 p-1.5 text-xs text-white rounded focus:outline-none focus:border-[#D4AF37]"
+                                    placeholder="사진에 대한 설명을 입력하세요"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
