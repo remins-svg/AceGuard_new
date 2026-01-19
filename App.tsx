@@ -1,4 +1,10 @@
 
+/**
+ * ACE GUARD PREMIUM LANDING PAGE - DEPLOYMENT BUILD V1.0.2
+ * Last Updated: 2025-05-22
+ * Fix: Deployment Blank Screen & GitHub Save Trigger
+ */
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Phone, 
@@ -218,7 +224,7 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
               <div className="flex justify-between items-end mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-2">수행 실적 관리</h2>
-                  <p className="text-white/40 text-sm">랜딩페이지의 '주요 수행 실적' 섹션에 노출되는 데이터를 편집합니다.</p>
+                  <p className="text-white/40 text-sm">실적 섹션 편집기입니다.</p>
                 </div>
                 <button onClick={addCase} className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded flex items-center gap-2 border border-white/5 transition-all">
                   <Plus size={18} /> 실적 추가
@@ -235,21 +241,12 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
                         <div className="aspect-square bg-neutral-900 rounded-lg overflow-hidden border border-white/10 relative">
                           <img src={c.img} className="w-full h-full object-cover" alt="" />
                         </div>
-                        <input type="text" value={c.img} onChange={(e) => updateCase(i, 'img', e.target.value)} className="w-full mt-3 bg-neutral-900 border border-white/10 p-2 text-[10px] text-white/40 rounded focus:outline-none focus:border-[#D4AF37]" placeholder="메인 이미지 URL" />
+                        <input type="text" value={c.img} onChange={(e) => updateCase(i, 'img', e.target.value)} className="w-full mt-3 bg-neutral-900 border border-white/10 p-2 text-[10px] text-white/40 rounded focus:outline-none focus:border-[#D4AF37]" placeholder="이미지 URL" />
                       </div>
                       <div className="col-span-2 space-y-4">
-                        <div>
-                          <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">제목</label>
-                          <input type="text" value={c.title} onChange={(e) => updateCase(i, 'title', e.target.value)} className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded focus:outline-none focus:border-[#D4AF37]" />
-                        </div>
-                        <div>
-                          <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">한줄 요약</label>
-                          <input type="text" value={c.year} onChange={(e) => updateCase(i, 'year', e.target.value)} className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded focus:outline-none focus:border-[#D4AF37]" />
-                        </div>
-                        <div>
-                          <label className="block text-white/30 text-[10px] uppercase font-bold mb-1">세부 리스트</label>
-                          <textarea value={c.desc} onChange={(e) => updateCase(i, 'desc', e.target.value)} className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded h-20 text-sm focus:outline-none focus:border-[#D4AF37]" />
-                        </div>
+                        <input type="text" value={c.title} onChange={(e) => updateCase(i, 'title', e.target.value)} className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded outline-none" placeholder="제목" />
+                        <input type="text" value={c.year} onChange={(e) => updateCase(i, 'year', e.target.value)} className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded outline-none" placeholder="한줄 요약" />
+                        <textarea value={c.desc} onChange={(e) => updateCase(i, 'desc', e.target.value)} className="w-full bg-neutral-900 border border-white/10 p-2 text-white rounded h-20 text-sm outline-none" placeholder="설명" />
                       </div>
                     </div>
                   </div>
@@ -263,18 +260,16 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
                <div className="space-y-6">
                  {localData.credits.map((group, i) => (
                    <div key={i} className="bg-black/40 border border-white/10 p-6 rounded-lg">
-                      <div className="flex items-center gap-4 mb-4">
-                        <input type="text" value={group.year} onChange={(e) => {
-                          const next = [...localData.credits];
-                          next[i].year = e.target.value;
-                          setLocalData({...localData, credits: next});
-                        }} className="bg-neutral-900 border border-white/10 p-2 text-white w-24 font-bold rounded focus:border-[#D4AF37] outline-none" />
-                      </div>
+                      <input type="text" value={group.year} onChange={(e) => {
+                        const next = [...localData.credits];
+                        next[i].year = e.target.value;
+                        setLocalData({...localData, credits: next});
+                      }} className="bg-neutral-900 border border-white/10 p-2 text-white w-24 font-bold rounded mb-4" />
                       <textarea value={group.items.join('\n')} onChange={(e) => {
                         const next = [...localData.credits];
                         next[i].items = e.target.value.split('\n');
                         setLocalData({...localData, credits: next});
-                      }} className="w-full h-40 bg-neutral-900 border border-white/10 p-4 text-white rounded focus:border-[#D4AF37] outline-none leading-relaxed" />
+                      }} className="w-full h-40 bg-neutral-900 border border-white/10 p-4 text-white rounded outline-none" />
                    </div>
                  ))}
                </div>
@@ -284,25 +279,9 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
             <div className="max-w-2xl animate-in fade-in duration-300">
               <h2 className="text-2xl font-bold text-white mb-8">기본 정보 설정</h2>
               <div className="space-y-6 bg-black/40 p-8 border border-white/10 rounded-xl">
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-white/40 text-xs mb-2">대표 전화</label>
-                    <input type="text" value={localData.contact.mainPhone} onChange={(e) => setLocalData({...localData, contact: {...localData.contact, mainPhone: e.target.value}})} className="w-full bg-neutral-900 border border-white/10 p-3 text-white rounded outline-none focus:border-[#D4AF37]" />
-                  </div>
-                  <div>
-                    <label className="block text-white/40 text-xs mb-2">긴급 상담</label>
-                    <input type="text" value={localData.contact.emergencyPhone} onChange={(e) => setLocalData({...localData, contact: {...localData.contact, emergencyPhone: e.target.value}})} className="w-full bg-neutral-900 border border-white/10 p-3 text-white rounded outline-none focus:border-[#D4AF37]" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-6 pt-4 border-t border-white/10">
-                   <div>
-                    <label className="block text-white/40 text-xs mb-2">사업자 번호</label>
-                    <input type="text" value={localData.contact.businessReg} onChange={(e) => setLocalData({...localData, contact: {...localData.contact, businessReg: e.target.value}})} className="w-full bg-neutral-900 border border-white/10 p-3 text-white rounded outline-none focus:border-[#D4AF37]" />
-                  </div>
-                  <div>
-                    <label className="block text-white/40 text-xs mb-2">대표자명</label>
-                    <input type="text" value={localData.contact.owner} onChange={(e) => setLocalData({...localData, contact: {...localData.contact, owner: e.target.value}})} className="w-full bg-neutral-900 border border-white/10 p-3 text-white rounded outline-none focus:border-[#D4AF37]" />
-                  </div>
+                <div>
+                  <label className="block text-white/40 text-xs mb-2">긴급 상담 연락처</label>
+                  <input type="text" value={localData.contact.emergencyPhone} onChange={(e) => setLocalData({...localData, contact: {...localData.contact, emergencyPhone: e.target.value}})} className="w-full bg-neutral-900 border border-white/10 p-3 text-white rounded outline-none" />
                 </div>
               </div>
             </div>
@@ -313,7 +292,7 @@ const AdminDashboard = ({ data, onSave, onClose }: { data: SiteData, onSave: (ne
   );
 };
 
-// --- Sub-components (Website) ---
+// --- Website Components ---
 
 const VideoSection = () => (
   <section className="relative h-screen w-full overflow-hidden bg-black">
@@ -322,53 +301,44 @@ const VideoSection = () => (
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#00050D]"></div>
     </div>
     <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center gap-2 animate-bounce">
-      <span className="text-white/60 text-xs tracking-wider uppercase font-light">더 보기</span>
       <ChevronDown className="text-[#D4AF37] w-8 h-8" strokeWidth={1.5} />
     </div>
   </section>
 );
 
 const PortfolioSection = ({ cases }: { cases: PortfolioCase[] }) => {
-  const [activeProjectIndex, setActiveProjectIndex] = useState<number | null>(null);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [imgIdx, setImgIdx] = useState(0);
 
-  const currentCase = useMemo(() => activeProjectIndex !== null ? cases[activeProjectIndex] : null, [activeProjectIndex, cases]);
+  const current = useMemo(() => activeIdx !== null ? cases[activeIdx] : null, [activeIdx, cases]);
 
   return (
-    <section className="py-24 px-4 bg-[#00050D] relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-            <div className="mb-16">
-                <span className="text-[#D4AF37] tracking-widest text-sm uppercase">Elite Track Record</span>
-                <h2 className="text-4xl md:text-5xl font-cinzel text-white mt-4">주요 수행 실적</h2>
-            </div>
+    <section className="py-24 px-4 bg-[#00050D]">
+        <div className="max-w-7xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-cinzel text-white mb-16">주요 수행 실적</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {cases.map((item, idx) => (
-                    <div key={idx} onClick={() => { setActiveProjectIndex(idx); setActiveImageIndex(0); }} className="group relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 cursor-pointer">
-                        <img src={item.img} alt={item.title} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 p-8 w-full">
-                            <span className="text-[#D4AF37] font-bold mb-2 block">{item.year}</span>
-                            <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-                            <p className="text-white/60 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{item.desc}</p>
+                {(cases || []).map((item, idx) => (
+                    <div key={idx} onClick={() => { setActiveIdx(idx); setImgIdx(0); }} className="group relative aspect-video bg-neutral-900 cursor-pointer overflow-hidden border border-white/5">
+                        <img src={item.img} className="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:grayscale-0 grayscale transition-all duration-700" alt="" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-8">
+                            <span className="text-[#D4AF37] font-bold">{item.year}</span>
+                            <h3 className="text-2xl font-bold text-white mt-2">{item.title}</h3>
                         </div>
                     </div>
                 ))}
             </div>
         </div>
-        {currentCase && (
-            <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/95 backdrop-blur-xl animate-in fade-in duration-500">
-                <button onClick={() => setActiveProjectIndex(null)} className="absolute top-8 right-8 text-white/60 hover:text-white"><X size={40} /></button>
-                <div className="w-full max-w-6xl px-4 flex flex-col items-center">
-                    <div className="w-full aspect-video md:aspect-[21/9] bg-neutral-900 overflow-hidden border border-white/10">
-                        <img src={currentCase.images[activeImageIndex]} className="w-full h-full object-cover" alt="" />
-                    </div>
-                    <div className="mt-8 text-center">
-                        <h3 className="text-3xl font-black text-white">{currentCase.title}</h3>
-                        <p className="text-white/40 mt-2">{currentCase.imageDetails?.[activeImageIndex] || currentCase.desc}</p>
-                    </div>
-                    <div className="mt-8 flex gap-4 overflow-x-auto max-w-full px-4 scrollbar-hide">
-                        {currentCase.images.map((img, i) => (
-                            <button key={i} onClick={() => setActiveImageIndex(i)} className={`w-16 h-16 flex-shrink-0 border-2 ${activeImageIndex === i ? 'border-[#D4AF37]' : 'border-white/10 opacity-50'}`}>
+        {current && (
+            <div className="fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md">
+                <button onClick={() => setActiveIdx(null)} className="absolute top-8 right-8 text-white/60"><X size={40} /></button>
+                <div className="max-w-6xl w-full text-center">
+                    <img src={current.images[imgIdx]} className="w-full aspect-video md:aspect-[21/9] object-cover border border-white/10" alt="" />
+                    <h3 className="text-3xl font-black text-white mt-8">{current.title}</h3>
+                    <p className="text-white/40 mt-2">{current.imageDetails?.[imgIdx] || current.desc}</p>
+                    <div className="mt-8 flex gap-4 justify-center">
+                        {current.images.map((img, i) => (
+                            <button key={i} onClick={() => setImgIdx(i)} className={`w-16 h-16 border-2 ${imgIdx === i ? 'border-[#D4AF37]' : 'border-white/10'}`}>
                                 <img src={img} className="w-full h-full object-cover" alt="" />
                             </button>
                         ))}
@@ -381,25 +351,15 @@ const PortfolioSection = ({ cases }: { cases: PortfolioCase[] }) => {
 };
 
 const EndingCredits = ({ credits }: { credits: CreditItem[] }) => (
-  <section className="py-32 bg-black border-y border-[#D4AF37]/20 relative h-[700px] overflow-hidden flex flex-col items-center">
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black to-transparent z-10"></div>
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-10"></div>
-      <div className="mb-12 text-center z-20">
-          <h2 className="text-2xl font-cinzel text-gold-gradient tracking-widest uppercase">Trust of Global Enterprises</h2>
-      </div>
-      <div className="relative w-full overflow-hidden flex-1">
-          <div className="animate-scroll-up flex flex-col items-center">
-              {[...credits, ...credits].map((group, idx) => (
-                  <div key={idx} className="mb-24 text-center">
-                      <h3 className="text-3xl font-cinzel text-[#D4AF37] mb-8 font-bold">{group.year}</h3>
-                      <div className="space-y-4">
-                          {group.items.map((item, i) => (
-                              <p key={i} className="text-xl md:text-2xl text-white/80 font-light">{item}</p>
-                          ))}
-                      </div>
-                  </div>
-              ))}
-          </div>
+  <section className="py-32 bg-black h-[700px] overflow-hidden relative flex flex-col items-center border-y border-[#D4AF37]/20">
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10 pointer-events-none"></div>
+      <div className="animate-scroll-up flex flex-col items-center">
+          {[...credits, ...credits].map((group, idx) => (
+              <div key={idx} className="mb-24 text-center">
+                  <h3 className="text-3xl font-cinzel text-[#D4AF37] mb-8">{group.year}</h3>
+                  {group.items.map((item, i) => <p key={i} className="text-xl md:text-2xl text-white/80 font-light mb-4">{item}</p>)}
+              </div>
+          ))}
       </div>
   </section>
 );
@@ -408,103 +368,89 @@ const ContactForm = ({ contact }: { contact: SiteData['contact'] }) => (
   <section className="py-24 px-4 bg-[#00050D]">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
           <div className="lg:w-1/2">
-              <span className="text-[#D4AF37] tracking-widest text-sm uppercase">Direct Consultation</span>
-              <h2 className="text-4xl md:text-5xl font-cinzel text-white mt-4 mb-8">상담문의</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
-                  <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-[#D4AF37]/10 flex items-center justify-center rounded text-[#D4AF37]"><Phone size={24} /></div>
-                      <div><p className="text-white/40 text-sm">대표전화</p><p className="text-2xl text-white font-bold">{contact.mainPhone}</p></div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-[#D4AF37]/10 flex items-center justify-center rounded text-[#D4AF37]"><MessageSquare size={24} /></div>
-                      <div><p className="text-white/40 text-sm">긴급상담</p><p className="text-2xl text-gold-gradient font-bold">{contact.emergencyPhone}</p></div>
-                  </div>
+              <h2 className="text-4xl font-cinzel text-white mb-8">상담문의</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div><p className="text-white/40 text-sm">대표전화</p><p className="text-2xl text-white font-bold">{contact.mainPhone}</p></div>
+                  <div><p className="text-white/40 text-sm">긴급상담</p><p className="text-2xl text-gold-gradient font-bold">{contact.emergencyPhone}</p></div>
               </div>
           </div>
-          <div className="lg:w-1/2">
-              <form className="bg-white/5 p-8 border border-white/10 flex flex-col gap-6">
-                  <div className="grid grid-cols-2 gap-6">
-                      <input type="text" className="bg-black/40 border border-white/10 px-4 py-3 text-white outline-none focus:border-[#D4AF37]" placeholder="성함" />
-                      <input type="tel" className="bg-black/40 border border-white/10 px-4 py-3 text-white outline-none focus:border-[#D4AF37]" placeholder="연락처" />
-                  </div>
-                  <textarea className="bg-black/40 border border-white/10 px-4 py-3 text-white h-40 outline-none focus:border-[#D4AF37]" placeholder="의뢰내용"></textarea>
-                  <button type="button" onClick={() => window.location.href = `sms:${contact.emergencyPhone}`} className="w-full py-4 bg-gradient-to-r from-[#D4AF37] via-[#FFFACD] to-[#BF9B30] text-black font-black uppercase">문자 보내기</button>
-              </form>
+          <div className="lg:w-1/2 bg-white/5 p-8 border border-white/10">
+              <div className="space-y-6">
+                <input type="text" className="w-full bg-black/40 border border-white/10 p-3 text-white outline-none focus:border-[#D4AF37]" placeholder="성함" />
+                <input type="tel" className="w-full bg-black/40 border border-white/10 p-3 text-white outline-none focus:border-[#D4AF37]" placeholder="연락처" />
+                <textarea className="w-full bg-black/40 border border-white/10 p-3 text-white h-32 outline-none focus:border-[#D4AF37]" placeholder="의뢰내용"></textarea>
+                <button onClick={() => window.location.href = `sms:${contact.emergencyPhone}`} className="w-full py-4 bg-gradient-to-r from-[#D4AF37] to-[#BF9B30] text-black font-bold">문자 보내기</button>
+              </div>
           </div>
       </div>
   </section>
 );
 
-const Footer = ({ contact, onAdminOpen }: { contact: SiteData['contact'], onAdminOpen: () => void }) => (
-  <footer className="py-12 px-4 border-t border-white/10 bg-black">
+const Footer = ({ contact, onAdmin }: { contact: SiteData['contact'], onAdmin: () => void }) => (
+  <footer className="py-12 px-4 bg-black border-t border-white/10 text-center md:text-left">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-center md:text-left">
+          <div>
               <div className="flex items-center gap-4 mb-4 justify-center md:justify-start">
-                <h2 className="font-cinzel text-2xl font-bold text-gold-gradient">ACE GUARD</h2>
-                <button onClick={onAdminOpen} className="text-white/10 hover:text-[#D4AF37]"><Settings size={14} /></button>
+                  <h2 className="text-2xl font-cinzel text-gold-gradient">ACE GUARD</h2>
+                  <button onClick={onAdmin} className="text-white/5 hover:text-[#D4AF37]"><Settings size={14} /></button>
               </div>
-              <div className="text-white/40 text-[11px] leading-relaxed">
-                  <p>(주)에이스가드 | 대표 : {contact.owner} | 사업자번호 : {contact.businessReg}</p>
-                  <p>주소 : {contact.address} | 사무소 : {contact.office}</p>
-                  <p>Copyright 2025 ACE GUARD. All Rights Reserved.</p>
-              </div>
+              <p className="text-white/40 text-xs">대표: {contact.owner} | 사업자번호: {contact.businessReg} | 주소: {contact.address}</p>
           </div>
           <div className="flex gap-6">
-              <a href="https://www.instagram.com/ace._.guard" className="text-white/40 hover:text-[#D4AF37]"><Instagram /></a>
-              <a href="https://www.youtube.com/channel/UCEYQhbuqHRtzSl-l-NKhF2Q" className="text-white/40 hover:text-[#D4AF37]"><Youtube /></a>
+              <a href="https://www.instagram.com/ace._.guard" className="text-white/40 hover:text-white"><Instagram /></a>
+              <a href="https://www.youtube.com/channel/UCEYQhbuqHRtzSl-l-NKhF2Q" className="text-white/40 hover:text-white"><Youtube /></a>
           </div>
       </div>
   </footer>
 );
 
 export default function App() {
-  const [siteData, setSiteData] = useState<SiteData>(INITIAL_DATA);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [password, setPassword] = useState('');
+  const [data, setData] = useState<SiteData>(INITIAL_DATA);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+  const [pw, setPw] = useState('');
 
   useEffect(() => {
     const saved = localStorage.getItem('aceguard_site_data');
     if (saved) {
-      try { setSiteData(JSON.parse(saved)); } catch (e) { console.error(e); }
+      try { setData(JSON.parse(saved)); } catch (e) { console.error(e); }
     }
   }, []);
 
-  const saveSiteData = (newData: SiteData) => {
-    setSiteData(newData);
+  const handleSave = (newData: SiteData) => {
+    setData(newData);
     localStorage.setItem('aceguard_site_data', JSON.stringify(newData));
   };
 
   return (
     <div className="min-h-screen">
-      {isAdminOpen && <AdminDashboard data={siteData} onSave={saveSiteData} onClose={() => setIsAdminOpen(false)} />}
-      {isAuthOpen && (
+      {isAdmin && <AdminDashboard data={data} onSave={handleSave} onClose={() => setIsAdmin(false)} />}
+      {isAuth && (
         <div className="fixed inset-0 z-[2100] bg-black/90 flex items-center justify-center p-4">
-           <div className="bg-neutral-900 p-8 rounded-2xl w-full max-w-sm border border-white/10">
-              <h3 className="text-xl font-bold text-white mb-6">관리자 로그인</h3>
-              <input autoFocus type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full bg-black border border-white/10 rounded p-3 text-white mb-4" />
-              <div className="flex gap-3">
-                <button onClick={() => setIsAuthOpen(false)} className="flex-1 text-white/40">취소</button>
-                <button onClick={() => { if(password === 'admin1234') { setIsAdminOpen(true); setIsAuthOpen(false); } else { alert('오류'); } }} className="flex-1 bg-[#D4AF37] text-black font-bold py-3 rounded">접속</button>
+           <div className="bg-neutral-900 p-8 rounded border border-white/10 max-w-sm w-full">
+              <h3 className="text-xl font-bold text-white mb-6">ADMIN</h3>
+              <input autoFocus type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="PW" className="w-full bg-black border border-white/10 p-3 text-white mb-4" />
+              <div className="flex gap-4">
+                <button onClick={() => setIsAuth(false)} className="flex-1 text-white/40">CLOSE</button>
+                <button onClick={() => { if(pw === 'admin1234') { setIsAdmin(true); setIsAuth(false); } else { alert('!'); } }} className="flex-1 bg-[#D4AF37] text-black font-bold py-3 rounded">LOGIN</button>
               </div>
            </div>
         </div>
       )}
-      <nav className="fixed top-0 left-0 w-full z-[100] px-8 py-6 bg-gradient-to-b from-black/80 to-transparent">
-        <div className="font-cinzel text-xl md:text-2xl font-black text-gold-gradient tracking-widest">ACE GUARD</div>
+      
+      <nav className="fixed top-0 w-full z-[100] p-8 bg-gradient-to-b from-black/80 to-transparent">
+        <h1 className="text-2xl font-cinzel text-gold-gradient tracking-widest">ACE GUARD</h1>
       </nav>
+
       <VideoSection />
-      <PortfolioSection cases={siteData.cases} />
-      <EndingCredits credits={siteData.credits} />
-      <ContactForm contact={siteData.contact} />
-      <Footer contact={siteData.contact} onAdminOpen={() => setIsAuthOpen(true)} />
+      <PortfolioSection cases={data.cases} />
+      <EndingCredits credits={data.credits} />
+      <ContactForm contact={data.contact} />
+      <Footer contact={data.contact} onAdmin={() => setIsAuth(true)} />
+
       <div className="fixed bottom-8 right-8 z-[100] flex flex-col gap-4">
-        <button onClick={() => window.location.href = `sms:${siteData.contact.emergencyPhone}`} className="flex items-center gap-2 bg-[#D4AF37] text-black px-4 py-3 rounded-full font-bold shadow-lg shadow-[#D4AF37]/20 hover:scale-105 transition-transform group">
-          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap">문자 상담</span><Phone size={20} />
-        </button>
-        <button onClick={() => window.open('https://pf.kakao.com/_jDrEG', '_blank')} className="flex items-center gap-2 bg-[#FEE500] text-black px-4 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform group">
-          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap">카톡 상담</span><MessageSquare size={20} fill="currentColor" />
-        </button>
+        <button onClick={() => window.location.href = `sms:${data.contact.emergencyPhone}`} className="bg-[#D4AF37] text-black p-4 rounded-full shadow-xl hover:scale-110 transition-transform"><Phone size={24} /></button>
+        <button onClick={() => window.open('https://pf.kakao.com/_jDrEG', '_blank')} className="bg-[#FEE500] text-black p-4 rounded-full shadow-xl hover:scale-110 transition-transform"><MessageSquare size={24} fill="currentColor" /></button>
       </div>
     </div>
   );
